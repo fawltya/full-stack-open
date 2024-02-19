@@ -21,9 +21,6 @@ const App = () => {
     ],
   };
 
-  // const renderParts = course.parts((part) => {
-  //   <Content parts={parts} />
-  // });
   return (
     <div>
       <Header course={course.name} />

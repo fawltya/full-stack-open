@@ -27,7 +27,6 @@ const App = () => {
     return anecdotes[selected];
   }
 
-  //   const points = Array(anecdotes.length).fill(0);
   //   console.log(points);
   const finalVote = [...votes];
 
@@ -35,7 +34,6 @@ const App = () => {
     finalVote[selected] += 1;
 
     setVotes(finalVote);
-    // const finalVote = [...points, [selected]];
   }
   console.log(votes);
 
