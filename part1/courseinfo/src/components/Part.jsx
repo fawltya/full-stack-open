@@ -1,9 +1,6 @@
 const Part = (props) => {
-  return (
-    <p>
-      {props.part} {props.exercise}
-    </p>
-  );
+  console.log(props);
+  return <p>{props.part}</p>;
 };
 
 export default Part;
