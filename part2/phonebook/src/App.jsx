@@ -3,6 +3,7 @@ import Phonebook from "./components/Phonebook";
 import NewContactForm from "./components/NewContactForm";
 import SearchContacts from "./components/SearchContacts";
 import axios from "axios";
+import peopleServices from "./services/people";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -10,11 +11,12 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   peopleServices.getAll();
+  //   // axios.get("http://localhost:3001/persons").then((response) => {
+  //   //   setPersons(response.data);
+  //   // });
+  // }, []);
 
   return (
     <div>

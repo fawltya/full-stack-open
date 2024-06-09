@@ -1,3 +1,5 @@
+import peopleServices from "../services/people";
+
 export default function NewContactForm({
   setNewName,
   setNewNumber,
@@ -7,34 +9,52 @@ export default function NewContactForm({
   newNumber,
 }) {
   const handleInput = (event) => {
-    setTimeout(() => {
-      const value = event.target.value;
-      switch (event.target.name) {
-        case "name":
-          setNewName(value);
-          break;
-        case "number":
-          setNewNumber(value);
-          break;
-        default:
-          break;
-      }
-    }, 500);
+    const value = event.target.value;
+    switch (event.target.name) {
+      case "name":
+        setNewName(value);
+        break;
+      case "number":
+        setNewNumber(value);
+        break;
+      default:
+        break;
+    }
   };
 
   const addNumber = (event) => {
     event.preventDefault();
-    const isSame = persons.find((person) => person.name === newName);
-    isSame
-      ? alert(`${newName} is already added to phonebook`)
-      : setPersons(persons.concat({ name: newName, number: newNumber }));
+    const newPerson = { name: newName, number: newNumber };
+    peopleServices.getAll().then((allContacts) => {
+      const isSameName = allContacts.find((person) => person.name === newName);
+      const isSameNumber = allContacts.find(
+        (person) => person.number === newNumber
+      );
+      if (isSameName) {
+        alert(`${newName} is already added to phonebook`);
+      }
+      if (isSameNumber) {
+        alert(`${newNumber} is already added to phonebook`);
+      } else {
+        peopleServices
+          .create(newPerson)
+          .then((response) => {
+            setPersons(persons.concat(response));
+            setNewName("");
+            setNewNumber("");
+          })
+          .catch((error) => {
+            console.log("There was an error: ", error);
+          });
+      }
+    });
   };
 
   return (
     <form>
       <div>
-        name: <input name="name" onChange={handleInput} />
-        number: <input name="number" onChange={handleInput} />
+        name: <input name="name" onChange={handleInput} value={newName} />
+        number: <input name="number" onChange={handleInput} value={newNumber} />
       </div>
       <div>
         <button type="submit" onClick={addNumber} style={{ margin: "10px" }}>
