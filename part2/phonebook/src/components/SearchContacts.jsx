@@ -3,9 +3,9 @@ export default function SearchContacts({ setSearchQuery }) {
     setSearchQuery(event.target.value);
   };
   return (
-    <>
-      <p>Search: </p>
+    <div className="search">
+      <p>Search:</p>
       <input onChange={handleSearch} />
-    </>
+    </div>
   );
 }

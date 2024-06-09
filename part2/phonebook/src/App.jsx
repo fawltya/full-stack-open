@@ -1,37 +1,38 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Phonebook from "./components/Phonebook";
 import NewContactForm from "./components/NewContactForm";
 import SearchContacts from "./components/SearchContacts";
-import axios from "axios";
-import peopleServices from "./services/people";
+import Toast from "./components/Toast";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-
-  // useEffect(() => {
-  //   peopleServices.getAll();
-  //   // axios.get("http://localhost:3001/persons").then((response) => {
-  //   //   setPersons(response.data);
-  //   // });
-  // }, []);
+  const [toastMessage, setToastMessage] = useState(null);
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <SearchContacts setSearchQuery={setSearchQuery} />
-      <NewContactForm
-        setNewName={setNewName}
-        setNewNumber={setNewNumber}
-        persons={persons}
-        setPersons={setPersons}
-        newName={newName}
-        newNumber={newNumber}
-      />
+      <div className="topSectionDiv">
+        <SearchContacts setSearchQuery={setSearchQuery} />
+        <NewContactForm
+          setNewName={setNewName}
+          setNewNumber={setNewNumber}
+          persons={persons}
+          setPersons={setPersons}
+          newName={newName}
+          newNumber={newNumber}
+          setToastMessage={setToastMessage}
+        />
+      </div>
       <h2>Numbers</h2>
-      <Phonebook persons={persons} searchQuery={searchQuery} />
+      <Phonebook
+        persons={persons}
+        searchQuery={searchQuery}
+        setToastMessage={setToastMessage}
+      />
+      <Toast message={toastMessage} />
     </div>
   );
 };

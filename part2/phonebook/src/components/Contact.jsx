@@ -1,7 +1,7 @@
 export default function Contact(props) {
   return (
     <p key={props.name}>
-      {props.name} {props.number}
+      <b>{props.name}</b> {props.number}
     </p>
   );
 }

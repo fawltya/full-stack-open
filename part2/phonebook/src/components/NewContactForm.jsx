@@ -7,6 +7,7 @@ export default function NewContactForm({
   setPersons,
   newName,
   newNumber,
+  setToastMessage,
 }) {
   const handleInput = (event) => {
     const value = event.target.value;
@@ -26,14 +27,34 @@ export default function NewContactForm({
     event.preventDefault();
     const newPerson = { name: newName, number: newNumber };
     peopleServices.getAll().then((allContacts) => {
-      const isSameName = allContacts.find((person) => person.name === newName);
+      const existingContact = allContacts.find(
+        (person) => person.name === newName
+      );
       const isSameNumber = allContacts.find(
         (person) => person.number === newNumber
       );
-      if (isSameName) {
-        alert(`${newName} is already added to phonebook`);
-      }
-      if (isSameNumber) {
+      if (existingContact) {
+        if (
+          confirm(
+            `${newName} is already added to phonebook, replace the old number with the new one?`
+          ) == true
+        ) {
+          const updatedContact = { ...existingContact, number: newNumber };
+          peopleServices
+            .update(existingContact.id, updatedContact)
+            .then((returnedPerson) => {
+              setPersons(
+                persons.map((person) => {
+                  person.id != existingContact.id ? person : returnedPerson;
+                })
+              );
+              setToastMessage(`Updated ${newName}'s number`);
+              setTimeout(() => {
+                setToastMessage(null);
+              }, 5000);
+            });
+        }
+      } else if (isSameNumber) {
         alert(`${newNumber} is already added to phonebook`);
       } else {
         peopleServices
@@ -42,6 +63,10 @@ export default function NewContactForm({
             setPersons(persons.concat(response));
             setNewName("");
             setNewNumber("");
+            setToastMessage(`Added ${newName}`);
+            setTimeout(() => {
+              setToastMessage(null);
+            }, 5000);
           })
           .catch((error) => {
             console.log("There was an error: ", error);
@@ -51,14 +76,14 @@ export default function NewContactForm({
   };
 
   return (
-    <form>
-      <div>
-        name: <input name="name" onChange={handleInput} value={newName} />
-        number: <input name="number" onChange={handleInput} value={newNumber} />
+    <form className="newContactForm">
+      <div className="newContactFields">
+        Name: <input name="name" onChange={handleInput} value={newName} />
+        Number: <input name="number" onChange={handleInput} value={newNumber} />
       </div>
-      <div>
-        <button type="submit" onClick={addNumber} style={{ margin: "10px" }}>
-          add
+      <div className="newContactButton">
+        <button type="submit" onClick={addNumber} className="addButton">
+          ADD
         </button>
       </div>
     </form>

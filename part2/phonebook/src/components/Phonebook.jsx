@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import Contact from "./Contact";
 import peopleServices from "../services/people";
 import DeleteButton from "./DeleteButton";
-import SearchContacts from "./SearchContacts";
 
-export default function Phonebook({ searchQuery, persons, setPersons }) {
+export default function Phonebook({ searchQuery, persons, setToastMessage }) {
   const [contacts, setContacts] = useState([]);
 
   const fetchContacts = () => {
@@ -32,9 +31,13 @@ export default function Phonebook({ searchQuery, persons, setPersons }) {
         .remove(id)
         .then(() => {
           fetchContacts();
+          setToastMessage(`Deleted number`);
+          setTimeout(() => {
+            setToastMessage(null);
+          }, 5000);
         })
         .catch((error) => {
-          console.log("There was an error: ", error);
+          alert(`Information on ${persons.name} was already removed.`);
         });
     }
   };
@@ -46,8 +49,13 @@ export default function Phonebook({ searchQuery, persons, setPersons }) {
           style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "center",
+            justifyContent: "space-between",
+            alignItems: "center",
             gap: "2rem",
+            border: "solid white 1px",
+            margin: "0.5rem 0",
+            borderRadius: "1rem",
+            padding: "0 1rem",
           }}
           key={person.name}
         >
